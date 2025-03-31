@@ -104,6 +104,11 @@ export default function NFTShowcase() {
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-110"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      loading="lazy"
+                      quality={75}
+                      onError={(e: any) => {
+                        e.target.src = '/images/placeholder.png' // 添加一个默认的占位图
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-[rgba(177,0,255,0.1)] to-[rgba(0,255,139,0.1)] group-hover:opacity-0 transition-opacity duration-300" />
                     

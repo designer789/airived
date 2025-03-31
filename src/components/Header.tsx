@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type Theme = 'purple' | 'green'
@@ -67,13 +67,20 @@ const getButtonStyles = (theme: Theme) => {
 export default function Header() {
   const [isHovered, setIsHovered] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleClick = (href: string) => {
+    if (typeof window === 'undefined') return
+    
     const element = document.querySelector(href)
     if (element) {
       const headerOffset = 100
       const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+      const offsetPosition = elementPosition + window.scrollY - headerOffset
 
       window.scrollTo({
         top: offsetPosition,
@@ -82,6 +89,9 @@ export default function Header() {
     }
     setIsMenuOpen(false)
   }
+
+  // Don't render anything until mounted to avoid hydration mismatch
+  if (!isMounted) return null
 
   return (
     <header className="fixed top-0 left-0 right-0 w-screen py-6 z-[1000] bg-[rgba(5,5,8,0.8)] backdrop-blur border-b border-[rgba(177,0,255,0.2)]">
@@ -125,7 +135,7 @@ export default function Header() {
 
         {/* Social Links */}
         <div className="hidden lg:flex gap-3">
-          {socialLinks.map((link) => {
+          {socialLinks.map((link: SocialLink) => {
             const styles = getButtonStyles(link.theme)
             return (
               <Link
@@ -177,7 +187,7 @@ export default function Header() {
                   ))}
                 </ul>
                 <div className="flex gap-4 mt-6">
-                  {socialLinks.map((link) => {
+                  {socialLinks.map((link: SocialLink) => {
                     const styles = getButtonStyles(link.theme)
                     return (
                       <Link
