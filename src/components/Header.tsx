@@ -5,15 +5,16 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const menuItems = [
-  { name: 'Home', href: '#' },
-  { name: 'Features', href: '#features' },
-  { name: 'Advantages', href: '#advantages' },
-  { name: 'Tokenomics', href: '#tokenomics' },
-  { name: 'FAQ', href: '#faq' },
-]
+type Theme = 'purple' | 'green'
 
-const socialLinks = [
+interface SocialLink {
+  name: string
+  href: string
+  theme: Theme
+  icon: JSX.Element
+}
+
+const socialLinks: SocialLink[] = [
   {
     name: 'Twitter',
     href: 'https://x.com/airived_coin',
@@ -36,6 +37,33 @@ const socialLinks = [
   }
 ]
 
+const menuItems = [
+  { name: 'Home', href: '#' },
+  { name: 'Features', href: '#features' },
+  { name: 'Advantages', href: '#advantages' },
+  { name: 'Tokenomics', href: '#tokenomics' },
+  { name: 'FAQ', href: '#faq' },
+]
+
+const getButtonStyles = (theme: Theme) => {
+  if (theme === 'purple') {
+    return {
+      border: 'border-[#b100ff]',
+      text: 'text-[#b100ff]',
+      hover: 'hover:bg-[rgba(177,0,255,0.1)]',
+      shadow: 'shadow-[0_0_10px_rgba(177,0,255,0.3)]',
+      hoverShadow: 'hover:shadow-[0_0_20px_rgba(177,0,255,0.5)]'
+    }
+  }
+  return {
+    border: 'border-[#00ff8b]',
+    text: 'text-[#00ff8b]',
+    hover: 'hover:bg-[rgba(0,255,139,0.1)]',
+    shadow: 'shadow-[0_0_10px_rgba(0,255,139,0.3)]',
+    hoverShadow: 'hover:shadow-[0_0_20px_rgba(0,255,139,0.5)]'
+  }
+}
+
 export default function Header() {
   const [isHovered, setIsHovered] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -53,25 +81,6 @@ export default function Header() {
       })
     }
     setIsMenuOpen(false)
-  }
-
-  const getButtonStyles = (theme: 'purple' | 'green') => {
-    if (theme === 'purple') {
-      return {
-        border: 'border-[#b100ff]',
-        text: 'text-[#b100ff]',
-        hover: 'hover:bg-[rgba(177,0,255,0.1)]',
-        shadow: 'shadow-[0_0_10px_rgba(177,0,255,0.3)]',
-        hoverShadow: 'hover:shadow-[0_0_20px_rgba(177,0,255,0.5)]'
-      }
-    }
-    return {
-      border: 'border-[#00ff8b]',
-      text: 'text-[#00ff8b]',
-      hover: 'hover:bg-[rgba(0,255,139,0.1)]',
-      shadow: 'shadow-[0_0_10px_rgba(0,255,139,0.3)]',
-      hoverShadow: 'hover:shadow-[0_0_20px_rgba(0,255,139,0.5)]'
-    }
   }
 
   return (
